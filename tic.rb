@@ -16,8 +16,11 @@ class BoardCase
     if !(0..8).include?(number)
       return false
     end
-    if
+
+    if @valeur != ' '
+      return false
     end
+    return true
   end
 end
 #-----------------------------------Board---------------------------------------
@@ -38,49 +41,50 @@ class Board
   end
   #definir la case jouée par une valeur
   def play(player)
+      number = 0
     loop do
-    puts "It is #{player.name}'s turn to play"
-    puts " choose a boardcase"
-    number = gets.chomp.to_i
-    break if
-  end
+      puts "It is #{player.name}'s turn to play"
+      puts " choose a boardcase"
+      number = gets.chomp.to_i - 1
+      break if @boardcases[number].valid?(number)
+    end
+    puts 'number ' + number.to_s
     @boardcases[number].valeur = player.valeur
   end
 
+#defiir le gagnant
+def victory
+  victory_lines || victory_columns || victory_diagonal
+end
+def victory_lines
+  victory_lines = [[0,1,2],[3,4,5],[6,7,8]]
+  victory_lines.each do |line|
+    line_str = ''
+    line.each { |x| line_str << @boardcases[x].to_s }
+    return true if ['XXX', 'OOO'].include? line_str
   end
-  #defiir le gagnant
-  def victory
-    victory_lines || victory_columns || victory_diagonal
-  end
-  def victory_lines
-    victory_lines = [[0,1,2],[3,4,5],[6,7,8]]
-    victory_lines.each do |line|
-      line_str = ''
-      line.each { |x| line_str << @boardcases[x].to_s }
-      return true if ['XXX', 'OOO'].include? line_str
-    end
-    false
-  end
+  false
+end
 
-  def victory_columns
-    victory_columns = [[0,3,6],[1,4,7],[2,5,8]]
-    victory_columns.each do |column|
-      column_str = ''
-      column.each { |x| column_str << @boardcases[x].to_s }
-      return true if ['XXX', 'OOO'].include? column_str
-    end
-    false
+def victory_columns
+  victory_columns = [[0,3,6],[1,4,7],[2,5,8]]
+  victory_columns.each do |column|
+    column_str = ''
+    column.each { |x| column_str << @boardcases[x].to_s }
+    return true if ['XXX', 'OOO'].include? column_str
   end
+  false
+end
 
-  def victory_diagonal
-    victory_diagonal = [[0,4,8],[2,4,6]]
-    victory_diagonal.each do |diagonal|
-      diagonal_str = ''
-      diagonal.each { |x| diagonal_str << @boardcases[x].to_s }
-      return true if ['XXX', 'OOO'].include? diagonal_str
-    end
-    false
+def victory_diagonal
+  victory_diagonal = [[0,4,8],[2,4,6]]
+  victory_diagonal.each do |diagonal|
+    diagonal_str = ''
+    diagonal.each { |x| diagonal_str << @boardcases[x].to_s }
+    return true if ['XXX', 'OOO'].include? diagonal_str
   end
+  false
+end
 
 def print_board
   puts " #{@boardcases[0]} | #{boardcases[1]} | #{boardcases[2]} "
@@ -144,12 +148,3 @@ end
 
 game = Game.new
 game.start_game
-
-binding.pry
-
-# une fonction qui qffiche lq boqrd
-# une fonction qui verifiey board plein
-# victory_lines 3 fonctions
-# fonction pour faire jouer un joueur
-# fonction qui demande a jouer tant quil faut
-#fonction qui verifie que case jouer pas deja jouée
