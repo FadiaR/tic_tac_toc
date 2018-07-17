@@ -41,7 +41,7 @@ class Board
     end
   end
   
-  #affiche les cases en string
+  #converti les cases en string
   def to_s
     return @boardcases.to_s
   end
@@ -142,7 +142,7 @@ class Game
     player = @player2
     loop do
       @board.print_board
-      #tant que la boucle est vraie, les deux joueurs s'alterent
+      #tant que la boucle est vraie, elle réalise l'alternance des joueurs
       if player == @player1
         player = @player2
       else
