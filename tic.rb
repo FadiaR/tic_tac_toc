@@ -1,23 +1,26 @@
-require 'pry'
 #---------------------------------BoardCase-------------------------------------
 #-------------------------------------------------------------------------------
-# ceci est un commentaire
+
 class BoardCase
+  #définit les valeurs (X, O, ' ') dans les cases
   attr_accessor :valeur
-  #definit les valeurs (x,O,nil) dans cases
+  
+  #initialise chaque case avec un espace
   def initialize
     @valeur = ' '
   end
-  #afficher la valeur en string
+  
+  #affiche la valeur en string
   def to_s
     return @valeur
   end
-
+  
   def valid?(number)
+    #vérifie si le chiffre entré est valide
     if !(0..8).include?(number)
       return false
     end
-
+    #vérifie que la case n'est pas déjà prise
     if @valeur != ' '
       return false
     end
@@ -27,36 +30,41 @@ end
 #-----------------------------------Board---------------------------------------
 #------------------------------------------------------------------------------
 class Board
+  #la classe Board fait le lien entre la classe BoardCase et la classe Game
   attr_accessor :boardcases
-  #faire le lien entre BoardCase et le Game =
-  #definit plateau en lien avec les cases
+  
+  #définit un plateau qui contient 9 instances de la classe BoardCase
   def initialize
     @boardcases = []
     9.times do
       @boardcases.push(BoardCase.new)
     end
   end
-  #afficher les cases en string
+  
+  #affiche les cases en string
   def to_s
     return @boardcases.to_s
   end
-  #definir la case jouée par une valeur
+  
+  #définit la case jouée par une valeur (comprise entre 0 et 8)
   def play(player)
       number = 0
     loop do
       puts "It is #{player.name}'s turn to play"
       puts " choose a boardcase"
       number = gets.chomp.to_i - 1
+      #la boucle finit quand le chiffre entré n'est pas valide, ou si la case contient déjà une valeur
       break if @boardcases[number].valid?(number)
     end
     puts 'number ' + number.to_s
     @boardcases[number].valeur = player.valeur
   end
 
-#defiir le gagnant
+#définit le gagnant
 def victory
   victory_lines || victory_columns || victory_diagonal
 end
+  #victory_lines; victory_columns; victory_diagonal verifient les conditions de victoire
 def victory_lines
   victory_lines = [[0,1,2],[3,4,5],[6,7,8]]
   victory_lines.each do |line|
@@ -87,6 +95,7 @@ def victory_diagonal
   false
 end
 
+#affiche le plateau
 def print_board
   puts " #{@boardcases[0]} | #{boardcases[1]} | #{boardcases[2]} "
   puts "---|---|---"
@@ -95,6 +104,7 @@ def print_board
   puts " #{boardcases[6]} | #{boardcases[7]} | #{boardcases[8]} "
 end
 
+#vérifie si le plateau a été rempli
 def is_full?
   @boardcases.each do |boardcase|
     return false if boardcase.to_s == ' '
@@ -106,36 +116,40 @@ end
 #-------------------------------Player-----------------------------------------
 #-------------------------------------------------------------------------------
 class Player
-  # definit les players
+  #definit les joueurs
   attr_reader :valeur, :name
+  
+  #definit le nom et le pion attribué a chaque joueur 
   def initialize(valeur)
     puts "Hi, Player, what is your name ?"
     @name = gets.chomp
     @valeur = valeur
   end
-  #nom et perdant/gagnant
 end
-#nom et perdant/gagnant
 #--------------------------------Game---------------------------------------------
 #-------------------------------------------------------------------------------
 class Game
   attr_accessor :player1, :player2, :board
+  
+  #initialise le plateau ainsi que les joueurs 
   def initialize
     @player1 = Player.new('X')
     @player2 = Player.new('O')
     @board = Board.new
   end
-
+  
   def start_game
     player = @player2
     loop do
       @board.print_board
+      #tant que la boucle est vraie, les deux joueurs s'alterent
       if player == @player1
         player = @player2
       else
         player = @player1
       end
       @board.play(player)
+      #condition d'arret de la boucle
       break if @board.victory || @board.is_full?
     end
     if @board.victory
@@ -147,5 +161,5 @@ class Game
   end
 end
 
-game = Game.new
-game.start_game
+game = Game.new.start_game
+#game.start_game
