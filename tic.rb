@@ -161,5 +161,5 @@ class Game
   end
 end
 
+#lance le jeu
 game = Game.new.start_game
-#game.start_game
