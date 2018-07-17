@@ -1,6 +1,7 @@
 require 'pry'
 #---------------------------------BoardCase-------------------------------------
 #-------------------------------------------------------------------------------
+# ceci est un commentaire
 class BoardCase
   attr_accessor :valeur
   #definit les valeurs (x,O,nil) dans cases
